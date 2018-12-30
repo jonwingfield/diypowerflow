@@ -154,7 +154,7 @@ exports.solar_prediction_kwh = function(panels_cfg, day_offset, lat, lon, msl, d
     if (typeof darkskyApi !== 'undefined' && darkskyApi !='') {
         var darksky = getDarksky(panels_cfg, lat, lon, darkskyApi, sunrise,sunset);
         var prediction = Math.round(yr * yr_weight + darksky * darksky_weight);
-  //      console.log('yr:'+Math.round(yr)+' darksky:'+Math.round(darksky)+' ~= '+ prediction);
+        console.log('yr:'+Math.round(yr)+' darksky:'+Math.round(darksky)+' ~= '+ prediction);
 
     } else {
         prediction = yr;

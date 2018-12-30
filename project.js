@@ -22,7 +22,7 @@ const panels_cfg = [
   }
 ];
 // API key for darksky.net, in order to use aditionally forecasr from darksky.net you need to get and enter an API key
-const darkskyApi = '';
+const darkskyApi = process.env.DARKSKY_API_KEY || '';
 
 // the final calculated prediction will use weighted average from yr and darksky
 // these are the weights for each forecast service, the sum should be 1.0
