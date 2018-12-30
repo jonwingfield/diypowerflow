@@ -40,11 +40,11 @@ const darsksky_weight = 0.4;
 
 //**************************************************
 // Influx kWh queries
-const timezone = "Europe/Warsaw";
-const house_kwh_query = "SELECT sum(kwh) as kwh FROM energy WHERE (device = 'house' OR device= 'house2') AND time > now() - 1d GROUP BY time(1d) fill(0) TZ('"+timezone+"')";
-const grid_kwh_query = "SELECT sum(kwh) as kwh FROM energy WHERE (device = 'sdm120') AND time > now() - 1d GROUP BY time(1d) fill(0) TZ('"+timezone+"')";
-const solar_kwh_query = "select sum(wh)/1000 as kwh from (select watt/60 as wh from(SELECT MEAN(charging_power) as watt FROM pcm_query_general_status WHERE time > now() - 1d GROUP BY time(60s) fill(null) TZ('"+timezone+"') )) group by time(1d) fill(0) TZ('"+timezone+"')";
-const powerwall_soc_query = "SELECT last(ShuntSOC) FROM generic";
+// const timezone = "Europe/Warsaw";
+// const house_kwh_query = "SELECT sum(kwh) as kwh FROM energy WHERE (device = 'house' OR device= 'house2') AND time > now() - 1d GROUP BY time(1d) fill(0) TZ('"+timezone+"')";
+// const grid_kwh_query = "SELECT sum(kwh) as kwh FROM energy WHERE (device = 'sdm120') AND time > now() - 1d GROUP BY time(1d) fill(0) TZ('"+timezone+"')";
+// const solar_kwh_query = "select sum(wh)/1000 as kwh from (select watt/60 as wh from(SELECT MEAN(charging_power) as watt FROM pcm_query_general_status WHERE time > now() - 1d GROUP BY time(60s) fill(null) TZ('"+timezone+"') )) group by time(1d) fill(0) TZ('"+timezone+"')";
+// const powerwall_soc_query = "SELECT last(ShuntSOC) FROM generic";
 
 //**************************************************
 // MQTT watt topics
@@ -66,16 +66,16 @@ const diy_sun = require('./diy_sun');
 const mqtt = require('mqtt');
 const mqtt_client = mqtt.connect('mqtt://'+mqtt_host);
 
-const Influx = require('influx');
-const influx = new Influx.InfluxDB({
-  host: influx_host,
-  database: 'powerwall'
-});
+// const Influx = require('influx');
+// const influx = new Influx.InfluxDB({
+//   host: influx_host,
+//   database: 'powerwall'
+// });
 
-const influx_batrium = new Influx.InfluxDB({
-  host: influx_host,
-  database: 'batrium'
-});
+// const influx_batrium = new Influx.InfluxDB({
+//   host: influx_host,
+//   database: 'batrium'
+// });
 
 
 var moment = require('moment');
@@ -190,29 +190,33 @@ mqtt_client.on('message', (topic, message) => {
 });
 
 app.get('/energy', function (req, res) {
-  influx.query(house_kwh_query).then( house => {
-    influx.query(grid_kwh_query).then ( grid => {
-      influx.query(solar_kwh_query).then ( solar => {
-        res.json(
-          [
-            {"name":"grid kwh","value": (grid === undefined || grid.length == 0)? 0 : grid[1].kwh},
-            {"name":"house kwh","value":house[1].kwh},
-            {"name":"solar kwh","value":solar[solar.length -1].kwh}
-          ]
-        );
-      });
-    });
-  });
+  // influx.query(house_kwh_query).then( house => {
+  //   influx.query(grid_kwh_query).then ( grid => {
+  //     influx.query(solar_kwh_query).then ( solar => {
+  const grid = [{},{kwh: 0}];
+  const house = [{},{kwh: 0}];
+  const solar = [{},{kwh: 0}];
+
+  res.json(
+    [
+      {"name":"grid kwh","value": (grid === undefined || grid.length == 0)? 0 : grid[1].kwh},
+      {"name":"house kwh","value":house[1].kwh},
+      {"name":"solar kwh","value":solar[solar.length -1].kwh}
+    ]
+  );
+      // });
+    // });
+  // });
 });
 
 app.get('/soc', function (req, res) {
-  influx_batrium.query(powerwall_soc_query).then( soc => {
+  // influx_batrium.query(powerwall_soc_query).then( soc => {
     res.json(
       [
-        {"name":"powerwall soc","value":soc[0].last}
+        {"name":"powerwall soc","value":0.0)
       ]
     );
-  });
+  // });
 });
 
 

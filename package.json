@@ -11,7 +11,6 @@
   "dependencies": {
     "express": "^4.16.3",
     "http": "0.0.0",
-    "influx": "^5.0.0-alpha.4",
     "moment": "latest",
     "mqtt": "^2.18.8",
     "suncalc": "latest",
