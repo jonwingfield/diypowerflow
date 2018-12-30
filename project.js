@@ -1,7 +1,7 @@
 //*********************
 // BASIC configuration
-const mqtt_host = "localhost";
-const influx_host = "localhost";
+const mqtt_host = "hahub";
+// const influx_host = "localhost";
 
 //**********************************************
 // Solar prediction configuration
@@ -16,15 +16,9 @@ const panels_cfg = [
   // wattPeak: the Wp of the panels
   {
     name: 'Roof',
-    azimuth: 8,
-    angle: 45,
-    wattPeak: 1560
-  },
-  {
-    name: 'Terrace',
-    azimuth: 8,
-    angle: 57,
-    wattPeak: 1560
+    azimuth: 0,
+    angle: 80,
+    wattPeak: 300
   }
 ];
 // API key for darksky.net, in order to use aditionally forecasr from darksky.net you need to get and enter an API key
