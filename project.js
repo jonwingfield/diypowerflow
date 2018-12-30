@@ -47,7 +47,7 @@ const house2_watt_topic = 'house2/watt';
 const grid_watt_topic = 'grid/watt';
 const powerwall_watt_topic = 'powerwall/watt';
 const solar_watt_topic = "solar/watt";
-
+const solar_kwh_topic = "solar/kwh";
 
 //**************************************************
 //**************************************************
@@ -160,6 +160,8 @@ mqtt_client.on("close",function(error){
   io.emit('solar', { message: 0 });
 });
 
+let solar_kwh = 0.0;
+
 mqtt_client.on('message', (topic, message) => {
   if(topic === house_watt_topic) {
     house = parseInt(message.toString());
@@ -180,6 +182,9 @@ mqtt_client.on('message', (topic, message) => {
     if(topic === solar_watt_topic) {
       solar = parseInt(message.toString());
       io.emit('solar', { message: solar });
+    } else
+    if (topic == solar_kwh_topic) {
+      solar_kwh = parseInt(message.toString());
     }
 });
 
@@ -189,7 +194,7 @@ app.get('/energy', function (req, res) {
   //     influx.query(solar_kwh_query).then ( solar => {
   const grid = [{},{kwh: 0}];
   const house = [{},{kwh: 0}];
-  const solar = [{},{kwh: 0}];
+  const solar = [{},{kwh: solar_kwh}];
 
   res.json(
     [
