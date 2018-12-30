@@ -43,9 +43,11 @@ const darsksky_weight = 0.4;
 //**************************************************
 // MQTT watt topics
 const house_watt_topic = 'house/watt';
+const house_kwh_topic = 'house/kwh';
 const house2_watt_topic = 'house2/watt';
 const grid_watt_topic = 'grid/watt';
 const powerwall_watt_topic = 'powerwall/watt';
+const powerwall_percent_topic = 'powerwall/percent';
 const solar_watt_topic = "solar/watt";
 const solar_kwh_topic = "solar/kwh";
 
@@ -146,9 +148,11 @@ io.on('connection', function(){
 mqtt_client.on('connect', () => {
   //  console.log("MQTT connected");
   mqtt_client.subscribe(house_watt_topic);
+  mqtt_client.subscribe(house_kwh_topic);
   mqtt_client.subscribe(house2_watt_topic);
   mqtt_client.subscribe(grid_watt_topic);
   mqtt_client.subscribe(powerwall_watt_topic);
+  mqtt_client.subscribe(powerwall_percent_topic);
   mqtt_client.subscribe(solar_watt_topic);
   mqtt_client.subscribe(solar_kwh_topic);
 });
@@ -162,15 +166,23 @@ mqtt_client.on("close",function(error){
 });
 
 let solar_kwh = 0.0;
+let house_kwh = 0.0;
+let powerwall_percent = 0.0;
 
 mqtt_client.on('message', (topic, message) => {
   if(topic === house_watt_topic) {
     house = parseInt(message.toString());
     io.emit('house', { message: house+house2 });
   } else
+    if(topic === house_kwh_topic) {
+      house_kwh = parseFloat(message.toString());
+    } else
     if(topic === powerwall_watt_topic) {
       powerwall = parseInt(message.toString());
       io.emit('powerwall', { message: powerwall });
+    } else
+    if(topic === powerwall_percent_topic) {
+      powerwall_percent = parseFloat(message.toString());
     } else
     if(topic === grid_watt_topic) {
       grid = parseInt(message.toString());
@@ -182,7 +194,8 @@ mqtt_client.on('message', (topic, message) => {
     } else
     if(topic === solar_watt_topic) {
       solar = parseInt(message.toString());
-      io.emit('solar', { message: solar });
+      io.emit('solar', { message: solar });  
+      io.emit('powerwall', { message: solar - house });
     } else
     if (topic === solar_kwh_topic) {
       solar_kwh = parseFloat(message.toString());
@@ -194,7 +207,7 @@ app.get('/energy', function (req, res) {
   //   influx.query(grid_kwh_query).then ( grid => {
   //     influx.query(solar_kwh_query).then ( solar => {
   const grid = [{},{kwh: 0}];
-  const house = [{},{kwh: 0}];
+  const house = [{},{kwh: house_kwh}];
   const solar = [{},{kwh: solar_kwh}];
 
   res.json(
@@ -213,7 +226,7 @@ app.get('/soc', function (req, res) {
   // influx_batrium.query(powerwall_soc_query).then( soc => {
     res.json(
       [
-        {"name":"powerwall soc","value":0.0 }
+        {"name":"powerwall soc","value":powerwall_percent }
       ]
     );
   // });
