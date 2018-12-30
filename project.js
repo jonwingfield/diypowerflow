@@ -11,22 +11,22 @@ const longitude = 20.0;
 const msl = 115; // Mean sea level (in meters)
 //
 const panels_cfg = [
-        // azimuth: in degrees (direction along the horizon, measured from south to west), e.g. 0 is south and 90 is west
-        // angle: angle the panels are facing relative to the horizon in degrees, e.g. 0 they are vertical, 90 they are flat
-        // wattPeak: the Wp of the panels
-        {
-            name: 'Roof',
-            azimuth: 8,
-            angle: 45,
-            wattPeak: 1560
-         },
-         {
-            name: 'Terrace',
-            azimuth: 8,
-            angle: 57,
-            wattPeak: 1560
-         }
-        ];
+  // azimuth: in degrees (direction along the horizon, measured from south to west), e.g. 0 is south and 90 is west
+  // angle: angle the panels are facing relative to the horizon in degrees, e.g. 0 they are vertical, 90 they are flat
+  // wattPeak: the Wp of the panels
+  {
+    name: 'Roof',
+    azimuth: 8,
+    angle: 45,
+    wattPeak: 1560
+  },
+  {
+    name: 'Terrace',
+    azimuth: 8,
+    angle: 57,
+    wattPeak: 1560
+  }
+];
 // API key for darksky.net, in order to use aditionally forecasr from darksky.net you need to get and enter an API key
 const darkskyApi = '';
 
@@ -95,17 +95,17 @@ var io = require('socket.io')(server);
 var SunCalc = require('suncalc');
 
 function emitSolarPrediction() {
-    prefix = "";
+  prefix = "";
 
-    if (solar_prediction_dayOffset>0) {
-        prefix = "tomorrow ";
-    }
+  if (solar_prediction_dayOffset>0) {
+    prefix = "tomorrow ";
+  }
 
-    io.emit('solar prediction', { message: "("+prefix+"prediction "+solar_prediction.toPrecision(2)+" kWh)" });
+  io.emit('solar prediction', { message: "("+prefix+"prediction "+solar_prediction.toPrecision(2)+" kWh)" });
 }
 
 function calculateSolarPrediction() {
-    return diy_sun.solar_prediction_kwh( panels_cfg, solar_prediction_dayOffset, latitude, longitude, msl, darkskyApi, yr_weight, darsksky_weight);
+  return diy_sun.solar_prediction_kwh( panels_cfg, solar_prediction_dayOffset, latitude, longitude, msl, darkskyApi, yr_weight, darsksky_weight);
 }
 
 // schedule every night to recalculate solar prediction for current day and schedule a job for the sunset
@@ -117,10 +117,10 @@ var j1 = schedule.scheduleJob('0 2 * * *', function(){
   emitSolarPrediction();
 
   var j2 = schedule.scheduleJob(moment(SunCalc.getTimes(moment(), latitude,longitude).sunset).toDate(), function(){
-      // at sunset recalculate solar prediction for tomorrow
-      solar_prediction_dayOffset = 1;
-      solar_prediction = calculateSolarPrediction();
-      emitSolarPrediction();
+    // at sunset recalculate solar prediction for tomorrow
+    solar_prediction_dayOffset = 1;
+    solar_prediction = calculateSolarPrediction();
+    emitSolarPrediction();
   });
 
 });
@@ -131,26 +131,26 @@ solar_prediction_dayOffset = moment().isAfter(moment(SunCalc.getTimes(moment(), 
 solar_prediction = calculateSolarPrediction();
 
 io.on('connection', function(){
-//    console.log("NEW CONNECTION sending all values on start");
-    if (house > 0 || house2 > 0) {
-        io.emit('house', { message: house+house2 });
-    }
-    if (powerwall != 0) {
-        io.emit('powerwall', { message: powerwall });
-    }
-    if (grid != 0) {
-        io.emit('grid', { message: grid });
-    }
-    if (solar > 0) {
-        io.emit('solar', { message: solar });
-    }
-    if (solar_prediction > 0) {
-        emitSolarPrediction();
-    }
+  //    console.log("NEW CONNECTION sending all values on start");
+  if (house > 0 || house2 > 0) {
+    io.emit('house', { message: house+house2 });
+  }
+  if (powerwall != 0) {
+    io.emit('powerwall', { message: powerwall });
+  }
+  if (grid != 0) {
+    io.emit('grid', { message: grid });
+  }
+  if (solar > 0) {
+    io.emit('solar', { message: solar });
+  }
+  if (solar_prediction > 0) {
+    emitSolarPrediction();
+  }
 });
 
 mqtt_client.on('connect', () => {
-//  console.log("MQTT connected");
+  //  console.log("MQTT connected");
   mqtt_client.subscribe(house_watt_topic);
   mqtt_client.subscribe(house2_watt_topic);
   mqtt_client.subscribe(grid_watt_topic);
@@ -159,48 +159,48 @@ mqtt_client.on('connect', () => {
 })
 
 mqtt_client.on("close",function(error){
-   console.log("mqtt can't connect"+error);
-   io.emit('house', { message: 0 });
-   io.emit('grid', { message: 0 });
-   io.emit('powerwall', { message: 0 });
-   io.emit('solar', { message: 0 });
- })
+  console.log("mqtt can't connect"+error);
+  io.emit('house', { message: 0 });
+  io.emit('grid', { message: 0 });
+  io.emit('powerwall', { message: 0 });
+  io.emit('solar', { message: 0 });
+})
 
 mqtt_client.on('message', (topic, message) => {
   if(topic === house_watt_topic) {
-       house = parseInt(message.toString())
-       io.emit('house', { message: house+house2 });
+    house = parseInt(message.toString())
+    io.emit('house', { message: house+house2 });
   } else
-  if(topic === powerwall_watt_topic) {
-       powerwall = parseInt(message.toString())
-       io.emit('powerwall', { message: powerwall });
-  } else
-  if(topic === grid_watt_topic) {
-       grid = parseInt(message.toString())
-       io.emit('grid', { message: grid });
-  } else
-  if(topic === house2_watt_topic) {
-       house2 = parseInt(message.toString())
-        io.emit('house', { message: house+house2 });
-  } else
-  if(topic === solar_watt_topic) {
-       solar = parseInt(message.toString())
-       io.emit('solar', { message: solar });
-   }
+    if(topic === powerwall_watt_topic) {
+      powerwall = parseInt(message.toString())
+      io.emit('powerwall', { message: powerwall });
+    } else
+    if(topic === grid_watt_topic) {
+      grid = parseInt(message.toString())
+      io.emit('grid', { message: grid });
+    } else
+    if(topic === house2_watt_topic) {
+      house2 = parseInt(message.toString())
+      io.emit('house', { message: house+house2 });
+    } else
+    if(topic === solar_watt_topic) {
+      solar = parseInt(message.toString())
+      io.emit('solar', { message: solar });
+    }
 })
 
 app.get('/energy', function (req, res) {
   influx.query(house_kwh_query).then( house => {
     influx.query(grid_kwh_query).then ( grid => {
-        influx.query(solar_kwh_query).then ( solar => {
-            res.json(
-                [
-                    {"name":"grid kwh","value": (grid === undefined || grid.length == 0)? 0 : grid[1].kwh},
-                    {"name":"house kwh","value":house[1].kwh},
-                    {"name":"solar kwh","value":solar[solar.length -1].kwh}
-                ]
-                );
-        });
+      influx.query(solar_kwh_query).then ( solar => {
+        res.json(
+          [
+            {"name":"grid kwh","value": (grid === undefined || grid.length == 0)? 0 : grid[1].kwh},
+            {"name":"house kwh","value":house[1].kwh},
+            {"name":"solar kwh","value":solar[solar.length -1].kwh}
+          ]
+        );
+      });
     });
   });
 })
@@ -208,10 +208,10 @@ app.get('/energy', function (req, res) {
 app.get('/soc', function (req, res) {
   influx_batrium.query(powerwall_soc_query).then( soc => {
     res.json(
-        [
-            {"name":"powerwall soc","value":soc[0].last}
-        ]
-        );
+      [
+        {"name":"powerwall soc","value":soc[0].last}
+      ]
+    );
   });
 })
 
