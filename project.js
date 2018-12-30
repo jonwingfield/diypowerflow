@@ -150,6 +150,7 @@ mqtt_client.on('connect', () => {
   mqtt_client.subscribe(grid_watt_topic);
   mqtt_client.subscribe(powerwall_watt_topic);
   mqtt_client.subscribe(solar_watt_topic);
+  mqtt_client.subscribe(solar_kwh_topic);
 });
 
 mqtt_client.on("close",function(error){
@@ -183,8 +184,8 @@ mqtt_client.on('message', (topic, message) => {
       solar = parseInt(message.toString());
       io.emit('solar', { message: solar });
     } else
-    if (topic == solar_kwh_topic) {
-      solar_kwh = parseInt(message.toString());
+    if (topic === solar_kwh_topic) {
+      solar_kwh = parseFloat(message.toString());
     }
 });
 
