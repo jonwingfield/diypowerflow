@@ -192,7 +192,7 @@ function refresh_ui() {
         $("#powerwall-dot-out").removeClass("on");
         $("#powerwall-dot-in").removeClass("on");
     }
-    $("#powerwall_soc").text(powerwall_soc+"%");
+    $("#powerwall_soc").text(powerwall_soc+"V");
 
     setAnimationTime(powerwall_watt,"#powerwall-dot-in animate.dot1, #powerwall-dot-out animate.dot1, #powerwall animate.glow","#powerwall-dot-in animate.dot2, #powerwall-dot-out animate.dot2");
 
