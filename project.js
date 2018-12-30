@@ -1,6 +1,6 @@
 //*********************
 // BASIC configuration
-const mqtt_host = "hahub";
+const mqtt_host = "localhost";
 // const influx_host = "localhost";
 
 //**********************************************
@@ -207,7 +207,7 @@ app.get('/soc', function (req, res) {
   // influx_batrium.query(powerwall_soc_query).then( soc => {
     res.json(
       [
-        {"name":"powerwall soc","value":0.0)
+        {"name":"powerwall soc","value":0.0 }
       ]
     );
   // });

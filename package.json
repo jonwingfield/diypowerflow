@@ -15,8 +15,8 @@
     "mqtt": "^2.18.8",
     "suncalc": "latest",
     "sync-request": "latest",
-    "fast-xml-parser" : "latest",
-    "node-schedule" : "latest",
+    "fast-xml-parser": "latest",
+    "node-schedule": "latest",
     "socket.io": "^2.1.1"
   }
 }
