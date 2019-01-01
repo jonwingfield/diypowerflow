@@ -6,9 +6,9 @@ const mqtt_host = "localhost";
 //**********************************************
 // Solar prediction configuration
 // for this to work, you must enter correct values for your location and panel configuration
-const latitude = 52.0;
-const longitude = 20.0;
-const msl = 115; // Mean sea level (in meters)
+const latitude = 28.5;
+const longitude = -82.3;
+const msl = 37; // Mean sea level (in meters)
 //
 const panels_cfg = [
   // azimuth: in degrees (direction along the horizon, measured from south to west), e.g. 0 is south and 90 is west
@@ -168,6 +168,8 @@ mqtt_client.on("close",function(error){
 let solar_kwh = 0.0;
 let house_kwh = 0.0;
 let powerwall_percent = 0.0;
+let powerwall_v = 0.0;
+let solar_watt_history = [];
 
 mqtt_client.on('message', (topic, message) => {
   if(topic === house_watt_topic) {
@@ -182,7 +184,10 @@ mqtt_client.on('message', (topic, message) => {
       io.emit('powerwall', { message: powerwall });
     } else
     if(topic === powerwall_percent_topic) {
-      powerwall_percent = parseFloat(message.toString());
+      var v, percent;
+      [percent, v] = message.toString().split(',');
+      powerwall_v = parseFloat(v.trim()).toFixed(2);
+      powerwall_percent = Math.round(parseFloat(percent.trim()));
     } else
     if(topic === grid_watt_topic) {
       grid = parseInt(message.toString());
@@ -193,7 +198,11 @@ mqtt_client.on('message', (topic, message) => {
       io.emit('house', { message: house+house2 });
     } else
     if(topic === solar_watt_topic) {
-      solar = parseInt(message.toString());
+      solar = Math.round(parseFloat(message.toString()));
+      solar_watt_history.push(solar);
+      if (solar_watt_history.length > 60*30) {
+        solar_watt_history.shift();
+      }
       io.emit('solar', { message: solar });  
       io.emit('powerwall', { message: solar - house });
     } else
@@ -214,7 +223,8 @@ app.get('/energy', function (req, res) {
     [
       {"name":"grid kwh","value": (grid === undefined || grid.length == 0)? 0 : grid[1].kwh},
       {"name":"house kwh","value":house[1].kwh},
-      {"name":"solar kwh","value":solar[solar.length -1].kwh}
+      {"name":"solar kwh","value":solar[solar.length -1].kwh},
+      {"name":"solar watt history","value":solar_watt_history}
     ]
   );
       // });
@@ -226,7 +236,7 @@ app.get('/soc', function (req, res) {
   // influx_batrium.query(powerwall_soc_query).then( soc => {
     res.json(
       [
-        {"name":"powerwall soc","value":powerwall_percent }
+        {"name":"powerwall soc","value": powerwall_percent + "% (" + powerwall_v + "V)" }
       ]
     );
   // });
