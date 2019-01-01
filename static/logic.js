@@ -1,7 +1,7 @@
 
 // ---- configuration ------
-var energy = "/energy";
-var soc = "/soc";
+var energy = "./energy";
+var soc = "./soc";
 
 var max_inactives_seconds = 180;
 
@@ -192,7 +192,7 @@ function refresh_ui() {
         $("#powerwall-dot-out").removeClass("on");
         $("#powerwall-dot-in").removeClass("on");
     }
-    $("#powerwall_soc").text(powerwall_soc+"%");
+    $("#powerwall_soc").html(powerwall_soc.replace("(", "<small>(").replace(")", ")</small>"));
 
     setAnimationTime(powerwall_watt,"#powerwall-dot-in animate.dot1, #powerwall-dot-out animate.dot1, #powerwall animate.glow","#powerwall-dot-in animate.dot2, #powerwall-dot-out animate.dot2");
 
@@ -201,7 +201,12 @@ function refresh_ui() {
 loadValues(energy);
 loadValues(soc);
 
-var socket = io.connect('/');
+var socket;
+if (window.location.host === 'jonwingfield.name') {
+	socket = io.connect('/',  { path: "/energy/socket.io" });
+} else {
+	socket = io.connect('/');
+}
 
 socket.on('house', function(data) {
     house_watt = parseInt(data.message);
