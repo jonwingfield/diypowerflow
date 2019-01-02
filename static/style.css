@@ -6,13 +6,22 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    /* prevent scrolling/bouncing on iOS */
+    position: fixed;
+    width: 100%;
     overflow: hidden;
     background-color: #010101;
     background-repeat: no-repeat;
-      background-image:
+      /*background-image:
         radial-gradient(
           #2c2c2c,
           #010101
+        );*/
+
+      background-image:
+        radial-gradient(
+          #2c2c2c,
+	  #000000
         );
 }
 
@@ -33,9 +42,9 @@ body {
 
 .left, .right {
     height:100%;
-    top: 33px;
+    top: 30px;
     bottom: 0px;
-    position: fixed;
+    position: absolute;
     display: table;
     margin:0 20px;
 }
@@ -60,7 +69,7 @@ text {
 	font-size: 18px;
 }
 
-p, text, h3 {
+p, text, h3, h1 {
     color:#a9acae;
     fill: #a9acae;
     font-family: "Gotham Light", Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -72,6 +81,25 @@ p, text, h3 {
 	margin:10px;
 }
 
+header {
+	height: 40px;
+}
+
+header .right-nav {
+	position: absolute;
+	top: 11px;
+	right: 10px;
+}
+
+h1 {
+	text-transform: uppercase;
+	text-align:center;
+	color: #d6d8da; 
+	font-size: 20px;
+	font-weight: 700;
+	padding-top: 5px;
+}
+
 h3 {
 	font-size: 18px;
 }
@@ -81,9 +109,10 @@ h3 small {
 }
 
 .middle {
-    height: calc(100% - 393px);
+    height: calc(90% - 393px - 40px);
     margin-top: -7px;
     margin-bottom: -7px;
+    position: relative;
 }
 
 #lines {
@@ -97,7 +126,7 @@ h3 small {
 }
 
 /**** OFF ****/
-svg image {
+svg image, svg > svg {
     opacity : .5;
 }
 svg .hollow {
@@ -121,7 +150,7 @@ svg circle {
 
 /**** ON ****/
 
-svg.on image {
+svg.on image, svg.on > svg {
     opacity : 1;
 }
 

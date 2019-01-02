@@ -12,6 +12,16 @@
     <script src="logic.js"></script>
 </head>
 <body>
+	<header>
+		<span class="right-nav">
+			<a href="javascript: document.location.href = '/energy/history/'">
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="26" height="26" x="0px" y="0px" fill="#d6d8da" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+				<path d="M39.6,5.1v76h13.9v-76H39.6z M60.4,30.4V81h14V30.4H60.4z M18.8,50.4V81h13.8V50.4H18.8z "/>
+			</svg>
+			</a>
+		</span>
+		<h1>Power Flow</h1>
+	</header>
 <h3 class="center">Solar</h3>
 <p class="center" id="solar_kwh"> 0 kWh</p>
 <p class="center" id="solar_prediction">&nbsp;</p>
@@ -28,8 +38,10 @@
     <circle cx="50%" cy="50%" r="45%" fill="black" stroke-width="2%">
 
     </circle>
-    <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="png/solar.png" x="42" y="33" height="41px"
-           width="47px"/>
+    <svg x="49" y="33" height="41px"
+		       width="47px">
+	    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="V1_0.Hero" transform="translate(-399.000000, -674.000000)"><g id="Badges" transform="translate(365.000000, 674.000000)"><g id="icon.solar" transform="translate(34.000000, 0.000000)"><polygon id="Fill-1" fill="#000000" points="6.36857143 13.2996857 10.6928571 13.2996857 10.6928571 12.0002571 6.36857143 12.0002571"></polygon><polygon id="Fill-2" fill="#FFFFFF" points="6.36857143 13.2988286 10.6928571 13.2988286 10.6928571 11.9994 6.36857143 11.9994"></polygon><polygon id="Fill-3" fill="#000000" points="24.3685714 13.2996857 28.6928571 13.2996857 28.6928571 12.0002571 24.3685714 12.0002571"></polygon><polygon id="Fill-4" fill="#FFFFFF" points="24.3685714 13.2988286 28.692 13.2988286 28.692 11.9994 24.3685714 11.9994"></polygon><polygon id="Fill-5" fill="#000000" points="17.196 5.2134 18.4851429 5.2134 18.4851429 0.856542857 17.196 0.856542857"></polygon><polygon id="Fill-6" fill="#FFFFFF" points="17.196 5.2134 18.4851429 5.2134 18.4851429 0.856542857 17.196 0.856542857"></polygon><polygon id="Fill-7" fill="#000000" points="10.5281143 21.0964286 13.5855429 18.0158571 12.6735429 17.0978571 9.61697143 20.1775714"></polygon><polygon id="Fill-8" fill="#FFFFFF" points="9.61662857 20.178 10.5286286 21.0968571 13.5852 18.0162857 12.6740571 17.0974286"></polygon><polygon id="Fill-9" fill="#000000" points="26.5782 5.0238 25.6670571 4.10494286 22.6087714 7.18551429 23.5207714 8.10351429"></polygon><polygon id="Fill-10" fill="#FFFFFF" points="22.6090286 7.1856 23.5201714 8.1036 26.5784571 5.02388571 25.6673143 4.10502857"></polygon><polygon id="Fill-11" fill="#010101" points="13.5854571 7.18542857 10.5280286 4.10485714 9.61688571 5.02371429 12.6743143 8.10342857"></polygon><polygon id="Fill-12" fill="#FFFFFF" points="9.61662857 5.02405714 12.6740571 8.10377143 13.5852 7.18577143 10.5286286 4.1052"></polygon><g id="Group-19" transform="translate(12.857143, 6.847114)" fill="#FFFFFF" stroke="#FFFFFF"><path d="M9.19687238,6.46422857 L5.30091429,6.46422857 L2.63010549,9.22509439 C1.26958656,8.45185076 0.351771429,6.98925107 0.351771429,5.31214286 C0.351771429,2.829 2.3652,0.815571429 4.84834286,0.815571429 C7.33234286,0.815571429 9.34577143,2.829 9.34577143,5.31214286 C9.34577143,5.71038611 9.2940191,6.096534 9.19687238,6.46422857 Z" id="Combined-Shape"></path></g><polygon id="Stroke-20" fill="#FFFFFF" points="7.12551429 27.6204 12.8632286 21.8561143 21.4055143 21.8561143 15.6678 27.6204"></polygon><polygon id="Stroke-21" fill="#FFFFFF" points="13.4749714 21.2442 19.2126857 15.4799143 27.7541143 15.4799143 22.0172571 21.2442"></polygon><polygon id="Stroke-22" fill="#FFFFFF" points="22.9662857 21.2442 28.7031429 15.4799143 37.2454286 15.4799143 31.5085714 21.2442"></polygon><polygon id="Stroke-23" fill="#FFFFFF" points="16.6428 27.5676857 22.3805143 21.8034 30.9228 21.8034 25.1850857 27.5676857"></polygon><polygon id="Stroke-24" fill="#FFFFFF" points="0.618685714 34.1268857 6.3564 28.3626 14.8986857 28.3626 9.16097143 34.1268857"></polygon><polygon id="Stroke-26" fill="#FFFFFF" points="10.1359714 34.0740857 15.8736857 28.3098 24.4159714 28.3098 18.6782571 34.0740857"></polygon><polygon id="Page-1" fill="#FFFFFF" points="19.0801532 34.4595687 37.3387613 16.1037889 37.3387613 16.9609317 19.0801532 35.3698544"></polygon><g id="Group-30" transform="translate(0.000000, 34.275686)" fill="#FFFFFF"><polygon id="Stroke-27" points="0.618857143 1.24028571 18.6745714 1.24028571 18.6745714 0.354857143 0.618857143 0.354857143"></polygon></g></g></g></g></g>
+    </svg>
     <text id="solar_watt" x="66" y="87" text-anchor="middle">2027 w</text>
 </svg>
 <div class='middle'>
@@ -192,8 +204,9 @@
                  to="0"></animate>
     </circle>
     <circle cx="50%" cy="50%" r="45%" fill="black" stroke-width="2%"/>
-    <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="png/powerwall.png" x="47" y="37" height="39px"
-           width="38px"></image>
+    <svg x="33" y="30" height="46px" width="45px" fill="#fff">
+	    <g id="Powerwall"><g id="Symbols_3_"><g id="V1_0.Hero_3_" transform="translate(-596.000000, -678.000000)" fill="#fff"><g id="Badges_3_" transform="translate(365.000000, 674.000000)" fill="#fff"><g id="icon.powerwall_2_" transform="translate(231.000000, 4.000000)" fill="#fff"><path id="Combined-Shape_3_" fill="#fff" class="st0" d="M23.3,7l15.8-2.9l3.6,1.1v29.7l-3.6,1.2l-15.8-3V7z M39.5,5.1V35l2.6-0.9V5.8L39.5,5.1z"></path></g></g></g></g></g>
+    </svg>
     <text id="powerwall_watt" x="65" y="90" text-anchor="middle">0 w</text>
 </svg>
 <h3 class="center">Powerwall</h3>
