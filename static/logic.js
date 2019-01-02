@@ -87,6 +87,7 @@ function updateValues(data) {
 
 function electronTime(watt) {
     w = Math.abs(watt);
+	//y = 0.03994327 + (6.608192 - 0.03994327)/(1 + (x/270.2608)^1.356501)
     if (w<50) {
         return 6;
     }
