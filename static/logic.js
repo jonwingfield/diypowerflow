@@ -124,6 +124,20 @@ function setAnimationTime(watt,selector1,selector2) {
     });
 }
 
+function formatEnergy(value) {
+    value = parseFloat(value);
+    if (value > 0) {
+	    if (value >= 1.0) {
+		    return value.toPrecision(2) + " kWh";
+	    } else {
+		    return Math.round(value * 1000) + " Wh";
+	    }
+    } else {
+	    return value.toPrecision(1) + " kWh";
+    }
+
+}
+
 function refresh_ui() {
     if (solar_watt>0) {
         $("#solar").addClass("on");
@@ -135,8 +149,7 @@ function refresh_ui() {
         $("#solar-line").removeClass("on");
         $("#solar-dot").removeClass("on");
     }
-    prec = (solar_kwh>0)? 3:1;
-    $("#solar_kwh").text(parseFloat(solar_kwh).toPrecision(prec)+" kWh");
+    $("#solar_kwh").text(formatEnergy(solar_kwh));
     setAnimationTime(solar_watt,"#solar-dot animate.dot1","#solar-dot animate.dot2");
 
     if (grid_watt!=0) {
@@ -156,8 +169,7 @@ function refresh_ui() {
         $("#grid-dot-out").removeClass("on");
         $("#grid-dot-in").removeClass("on");
     }
-    prec = (grid_kwh>0)? 1:1;
-    $("#grid_kwh").text(parseFloat(grid_kwh).toPrecision(prec)+" kWh");
+    $("#grid_kwh").text(formatEnergy(grid_kwh));
     setAnimationTime(grid_watt,"#grid-dot-in animate.dot1, #grid-dot-out animate.dot1","#grid-dot-in animate.dot2, #grid-dot-out animate.dot2");
 
     if (house_watt>0) {
@@ -170,8 +182,7 @@ function refresh_ui() {
         $("#house-line").removeClass("on");
         $("#house-dot").removeClass("on");
     }
-    prec = (house_kwh>0)? 3:1;
-    $("#house_kwh").text(parseFloat(house_kwh).toPrecision(prec)+" kWh");
+    $("#house_kwh").text(formatEnergy(house_kwh));
 
     setAnimationTime(house_watt,"#house-dot animate.dot1, #house animate.glow","#house-dot animate.dot2");
 
@@ -230,5 +241,5 @@ socket.on("solar prediction", function(data){
 var interval = setInterval(function() {
     loadValues(energy);
     loadValues(soc);
-}, 60000);
+}, 30000);
 
